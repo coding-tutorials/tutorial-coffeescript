@@ -1,0 +1,13 @@
+{
+  "name": "tutorial-coffeescript-mongodb",
+  "description": "coffeescript, mongodb and stuff",
+  "author": "Wagner Leonardi (leonardiwagner@gmail.com)",
+  "dependencies": {
+    "grunt": "x.x.x",
+    "grunt-contrib-coffee": "x.x.x",
+  	"grunt-contrib-jshint": "x.x.x",
+  	"grunt-contrib-watch": "x.x.x",
+    "mongodb": "x.x.x"
+  },
+  "engine": "node >= 0.10"
+}
