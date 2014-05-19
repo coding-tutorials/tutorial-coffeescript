@@ -19,6 +19,7 @@ class PersonRepository
   collectionPerson = null
 
   constructor: ()->
+    #todo: make this work
     db = new Database()
     mongoloide = db.mongo
     @collectionPerson = mongoloide("person")
