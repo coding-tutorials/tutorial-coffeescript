@@ -40,7 +40,7 @@ app.get('/student', routes.student)
 
 
 http.createServer(app).listen(8080, function(){
-	console.log('express is there!');
+	console.log('express is therea!');
 });
 
 /*
