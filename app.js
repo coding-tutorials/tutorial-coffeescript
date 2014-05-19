@@ -1,10 +1,8 @@
 (function() {
-  var Database, Person, http;
+  var Database, PersonRepository, http, insertPeopleIntoMongo;
 
   Database = (function() {
     var Server, mongo, mongoClient;
-
-    function Database() {}
 
     mongo = require("mongodb/lib/mongodb");
 
@@ -12,9 +10,16 @@
 
     mongoClient = require('mongodb').MongoClient;
 
+    mongo = null;
+
+    function Database() {
+      this.connectToDb();
+    }
+
     Database.prototype.connectToDb = function() {
       return mongoClient.connect('mongodb://localhost:27017/exampleDb', function(err, db) {
         if (!err) {
+          this.mongo = db;
           return console.log("connected to mongo!");
         } else {
           return console.log("failed to connect to mongo :(");
@@ -26,14 +31,19 @@
 
   })();
 
-  Person = (function() {
+  PersonRepository = (function() {
     var collectionPerson;
 
-    function Person() {}
+    collectionPerson = null;
 
-    collectionPerson = db.collection("person");
+    function PersonRepository() {
+      var db, mongoloide;
+      db = new Database();
+      mongoloide = db.mongo;
+      this.collectionPerson = mongoloide("person");
+    }
 
-    Person.prototype.insert = function(people) {
+    PersonRepository.prototype.insert = function(people) {
       return collectionPerson.insert(people, {
         W: 1
       }, function(err, result) {
@@ -41,12 +51,12 @@
       });
     };
 
-    return Person;
+    return PersonRepository;
 
   })();
 
-  insertPeopleIntoMongo(function() {
-    var costa, john, people, rafaello;
+  insertPeopleIntoMongo = function() {
+    var costa, john, people, personRepository, rafaello;
     john = {
       "name": "John Kinera",
       "age": 19,
@@ -58,7 +68,7 @@
       "courses": ["philosophem"]
     };
     costa = {
-      "name": "Kliev K. Costa",
+      "name": "Kligitev K. Costa",
       "age": 23,
       "courses": ["french", "sciences"]
     };
@@ -67,8 +77,10 @@
       rafaello: rafaello,
       costa: costa
     };
+    personRepository = new PersonRepository();
+    personRepository.insert(people);
     return people;
-  });
+  };
 
   http = require('http');
 
@@ -77,6 +89,7 @@
       response.writeHead(200, {
         "Content-Type": "text/plain"
       });
+      console.log("initializing");
       insertPeopleIntoMongo();
       return response.end();
     };
